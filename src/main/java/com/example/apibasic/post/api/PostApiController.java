@@ -1,5 +1,7 @@
 package com.example.apibasic.post.api;
 
+import com.example.apibasic.post.dto.PostCreateDTO;
+import com.example.apibasic.post.dto.PostResponseDTO;
 import com.example.apibasic.post.entity.PostEntity;
 import com.example.apibasic.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.*;
 
 // 리소스 : 게시물 (Post)
 /*
@@ -38,6 +43,12 @@ public class PostApiController {
     public ResponseEntity<?> list() {
         log.info("/posts GET request");
         List<PostEntity> list = postRepository.findAll();
+
+        //엔터티 리스트를 DTO리스트로 변환해서 클라이언트에게 응답
+        List<PostResponseDTO> responseDTOList = list.stream()
+                .map(PostResponseDTO::new)
+                .collect(toList());
+
         return ResponseEntity
                 .ok()
                 .body(list)
@@ -58,9 +69,12 @@ public class PostApiController {
 
     // 게시물 등록
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody PostEntity entity) {
+    public ResponseEntity<?> create(@RequestBody PostCreateDTO createDTO) {
         log.info("/posts POST request");
-        log.info("게시물 정보: {}", entity);
+        log.info("게시물 정보: {}", createDTO);
+
+        // dto를 entity변환 작업
+        PostEntity entity = createDTO.toEntity();
 
         boolean flag = postRepository.save(entity);
         return flag
