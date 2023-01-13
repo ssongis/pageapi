@@ -45,6 +45,6 @@ public class ApiController2 {
     public static class OrderInfo{
         private Long orderNo;
         private String goodsName;
-        private String goodsAmount;
+        private int goodsAmount;
     }
 }
