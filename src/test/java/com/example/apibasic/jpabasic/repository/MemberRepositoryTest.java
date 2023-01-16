@@ -65,7 +65,7 @@ class MemberRepositoryTest {
         // given - when - then 패턴
         // given : 테스트시 주어지는 데이터
         MemberEntity saveMember = MemberEntity.builder()
-                .account("zzz1234")
+                .account("zzz1235353344")
                 .password("1234")
                 .nickName("꾸러긔")
                 .gender(FEMALE)
@@ -73,7 +73,7 @@ class MemberRepositoryTest {
         // when : 실제 테스트 상황
         memberRepository.save(saveMember); // insert쿼리 실행
 
-        Optional<MemberEntity> foundMember = memberRepository.findById(1L);// pk기반 단일 행 조회
+        Optional<MemberEntity> foundMember = memberRepository.findById(4L);// pk기반 단일 행 조회
 
         // then : 테스트 결과 단언
         // 회원이 조회되었을 것이다.
@@ -129,8 +129,8 @@ class MemberRepositoryTest {
 
     @Test
     @DisplayName("2번 회원의 닉네임과 성별을 수정해야 한다.")
-    @Transactional
-    @Rollback
+//    @Transactional
+//    @Rollback
     void modifyTest() {
         // given
         Long userCode = 2L;
@@ -138,12 +138,21 @@ class MemberRepositoryTest {
         Gender newGender = FEMALE;
 
         // when
-        // JPA에서 수정은 조회 후 setter로 변경
+        // JPA에서 수정은 조회 후 setter로 변경 후 다시 save
         Optional<MemberEntity> foundMember = memberRepository.findById(userCode);
-        foundMember.ifPresent(m -> {
+
+        if (foundMember.isPresent()) {
+            MemberEntity m = foundMember.get();
             m.setNickName(newNickName);
             m.setGender(newGender);
-        });
+            memberRepository.save(m);
+        }
+
+//        foundMember.ifPresent(m -> {
+//            m.setNickName(newNickName);
+//            m.setGender(newGender);
+//            memberRepository.save(m);
+//        });
 
         Optional<MemberEntity> modifiedMember = memberRepository.findById(userCode);
 
