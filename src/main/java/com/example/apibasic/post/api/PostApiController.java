@@ -4,6 +4,8 @@ import com.example.apibasic.post.dto.*;
 import com.example.apibasic.post.entity.PostEntity;
 import com.example.apibasic.post.repository.PostRepository;
 import com.example.apibasic.post.service.PostService;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -54,7 +56,7 @@ public class PostApiController {
                     ;
         } catch (Exception e) {
             return ResponseEntity
-                    .noContent() //notFound()도 괜찮음.
+                    .notFound()
                     .build()
                     ;
         }
@@ -80,6 +82,10 @@ public class PostApiController {
     }
 
     // 게시물 등록
+    @Parameters({
+            @Parameter(name = "작성자", description = "게시물 작성자를 입력", example = "김철수"),
+            @Parameter(name = "내용", description = "글 내용 입력", example = "하하호호호~~")
+    })
     @PostMapping
     public ResponseEntity<?> create(
             @Validated @RequestBody PostCreateDTO createDTO
