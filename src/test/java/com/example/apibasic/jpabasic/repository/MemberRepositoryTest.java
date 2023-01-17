@@ -33,7 +33,7 @@ class MemberRepositoryTest {
         MemberEntity saveMember1 = MemberEntity.builder()
                 .account("zzz1234")
                 .password("1234")
-                .nickName("박꾸러긔")
+                .nickName("꾸러긔")
                 .gender(FEMALE)
                 .build();
         MemberEntity saveMember2 = MemberEntity.builder()
@@ -80,7 +80,7 @@ class MemberRepositoryTest {
         // when : 실제 테스트 상황
         memberRepository.save(saveMember); // insert쿼리 실행
 
-        Optional<MemberEntity> foundMember = memberRepository.findById(4L);// pk기반 단일 행 조회
+        Optional<MemberEntity> foundMember = memberRepository.findById(1L);// pk기반 단일 행 조회
 
         // then : 테스트 결과 단언
         // 회원이 조회되었을 것이다.
@@ -107,8 +107,8 @@ class MemberRepositoryTest {
         List<MemberEntity> memberEntityList = memberRepository.findAll();
 
         // then
-        // 조회된 리스트의 사이즈는 3이어야 한다.
-        assertEquals(3, memberEntityList.size());
+        // 조회된 리스트의 사이즈는 4이어야 한다.
+        assertEquals(4, memberEntityList.size());
         // 조회된 리스트의 2번째 회원 닉네임은 궁예여야한다.
         assertEquals("궁예", memberEntityList.get(1).getNickName());
 
@@ -123,14 +123,14 @@ class MemberRepositoryTest {
     @Rollback
     void deleteTest() {
         // given
-        Long userCode = 2L;
+        Long userCode = 3L;
         // when
         memberRepository.deleteById(userCode);
         Optional<MemberEntity> foundMember = memberRepository.findById(userCode);
 
         // then
         assertFalse(foundMember.isPresent());
-        assertEquals(2, memberRepository.findAll().size());
+        assertEquals(3, memberRepository.findAll().size());
 
     }
 
